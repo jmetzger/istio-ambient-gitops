@@ -1,7 +1,9 @@
 # Damit Sync Waves zwischen Applications wirken (App of Apps), muss ArgoCD den Zustand einer
 # Application bewerten koennen. Diese Pruefung ist seit ArgoCD 1.8 nicht mehr eingebaut.
 # Ohne sie legt die Root-Application alle Kinder direkt nacheinander an, ohne auf "Healthy" zu warten.
-#   kubectl apply --server-side -f bootstrap/argocd-cm-app-health.yaml
+# Als Patch einspielen, nicht mit "kubectl apply --server-side": das wuerde die uebrigen Felder der
+# ConfigMap entfernen (gleicher Feld-Manager wie bei der Installation), ArgoCD faende sie dann nicht mehr.
+#   kubectl -n argocd patch configmap argocd-cm --type merge --patch-file bootstrap/argocd-cm-app-health.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
