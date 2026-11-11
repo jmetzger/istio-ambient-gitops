@@ -4,6 +4,8 @@ metadata:
   name: gateway-api-crds
   namespace: argocd
   annotations:
+    # CRDs werden per Server-Side Apply geschrieben, also auch so vergleichen (sonst dauerhaft OutOfSync).
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
     argocd.argoproj.io/sync-wave: "-3"
   finalizers:
     - resources-finalizer.argocd.argoproj.io

@@ -16,9 +16,18 @@ spec:
     helm:
       valuesObject:
         profile: ambient
+        # Ohne metrics-server bleibt der HPA ohne Messwert und ArgoCD meldet die Application als Degraded.
+        autoscaleEnabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
+  ignoreDifferences:
+    # istiod stellt failurePolicy nach dem Start selbst von Ignore auf Fail und traegt das CA-Bundle ein.
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      jqPathExpressions:
+        - .webhooks[]?.failurePolicy
+        - .webhooks[]?.clientConfig.caBundle
   syncPolicy:
     automated:
       prune: true
@@ -26,3 +35,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true

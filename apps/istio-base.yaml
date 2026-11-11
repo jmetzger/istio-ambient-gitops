@@ -4,6 +4,8 @@ metadata:
   name: istio-base
   namespace: argocd
   annotations:
+    # CRDs werden per Server-Side Apply geschrieben, also auch so vergleichen (sonst dauerhaft OutOfSync).
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
     argocd.argoproj.io/sync-wave: "-2"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -16,6 +18,13 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
+  ignoreDifferences:
+    # istiod stellt failurePolicy nach dem Start selbst von Ignore auf Fail und traegt das CA-Bundle ein.
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      jqPathExpressions:
+        - .webhooks[]?.failurePolicy
+        - .webhooks[]?.clientConfig.caBundle
   syncPolicy:
     automated:
       prune: true
@@ -23,3 +32,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
