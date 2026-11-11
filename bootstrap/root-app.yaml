@@ -1,0 +1,22 @@
+# Einziger Handgriff am Cluster:  kubectl apply -f bootstrap/root-app.yaml
+# Die Root-Application liest den Ordner apps/ und legt daraus alle weiteren Applications an (App of Apps).
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/jmetzger/istio-ambient-gitops.git
+    targetRevision: main
+    path: apps
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

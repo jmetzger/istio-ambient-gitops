@@ -1,0 +1,8 @@
+# Namespace im Ambient Mesh (ztunnel, L4) und mit Waypoint fuer L7.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bookinfo
+  labels:
+    istio.io/dataplane-mode: ambient
+    istio.io/use-waypoint: waypoint
