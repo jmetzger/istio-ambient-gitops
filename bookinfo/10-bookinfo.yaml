@@ -37,6 +37,7 @@ metadata:
     app: details
     service: details
     training: istio
+    day: friday
 spec:
   ports:
   - port: 9080
