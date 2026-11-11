@@ -36,6 +36,7 @@ metadata:
   labels:
     app: details
     service: details
+    training: istio
 spec:
   ports:
   - port: 9080
