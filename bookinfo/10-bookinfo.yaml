@@ -38,6 +38,7 @@ metadata:
     service: details
     training: istio
     day: friday
+    farbe: blau 
 spec:
   ports:
   - port: 9080
